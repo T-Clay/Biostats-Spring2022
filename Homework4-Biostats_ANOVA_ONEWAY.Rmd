@@ -1,0 +1,199 @@
+---
+title: "Homework 4"
+author: "Tyler Clay"
+date: "3/29/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+
+Library
+
+```{r}
+library(readxl)
+library(ggplot2)
+library(rmarkdown)
+library(ggpubr)
+library(onewaytests)
+library(car)
+library(normtest)
+library(moments)
+library(dplyr)
+library(dlookr)
+library(gplots)
+library(gtools)
+library(gdata)
+```
+
+
+
+1) Fishies
+
+Ho: The mean length of all fish is equal
+Ha: The mean length of all fish is not equal
+
+```{r}
+#Assumptions of ANOVA
+#Normal distribution
+#Equal variance
+#Random samples
+#Independence
+#Data is categorized in the same way
+
+myfish<-read_excel('FishLength.xlsx')
+#data<-as.numeric(unlist(mydata['length']))
+str(myfish)
+myfish$species<-as.factor(myfish$species)
+str(myfish)
+
+ggplot(myfish,aes(x=species))+
+  geom_density(aes(group=length,color=length,fill=length),alpha=0.3)
+
+levels(myfish$species)
+group_by(myfish,species)
+out.fish<-group_by(myfish,species)
+
+
+```
+
+Summary Stats
+
+```{r}
+
+#Normality was run here
+normality(out.fish)
+
+#Test for homogeneity of variances
+bartlett.test(myfish$length~myfish$species)
+
+```
+
+ANOVA Test
+```{r}
+
+fish.test<-aov(length~species,data=myfish)
+summary(fish.test)
+
+```
+
+
+Conclusion
+
+
+
+2) T-Rex
+
+Ho: The mean of all oxygen isotopes of all bones are equal
+Ha: The mean of all oxygen isotopes of all bones are not equal 
+
+```{r}
+
+#Assumptions of ANOVA
+#Normal distribution
+#Equal variance
+#Random samples
+#Independence
+#Data is categorized in the same way
+
+myrex<-read_excel('t_rex.xlsx')
+str(myrex)
+myrex$bone<-as.factor(myrex$bone)
+str(myrex)
+
+levels(myrex$bone)
+group_by(myrex,bone)
+out.rex<-group_by(myrex,bone)
+
+ggplot(myrex,aes(x=bone))+
+  geom_density(aes(group=isotope_oxygen,color=isotope_oxygen,fill=isotope_oxygen),alpha=0.3)
+
+```
+
+
+Summary Stats
+
+```{r}
+
+#Normality was run here
+normality(out.rex)
+
+#Test for homogeneity of variances
+bartlett.test(myfish$isotope_oxygen~myfish$bone)
+
+```
+
+ANOVA Test
+
+```{r}
+
+rex.test<-aov(isotope_oxygen~bone,data=myrex)
+summary(rex.test)
+
+```
+
+
+
+Conclusion
+
+
+
+3) Flies
+
+Ho: The mean of the volume of flies is equal across all foliage types. 
+Ha: The mean of the volume of flies is not equal across all foliage types.  
+
+```{r}
+
+###Assumptions of ANOVA
+#Normal distribution
+#Equal variance
+#Random samples
+#Independence
+#Data is categorized in the same way
+
+myfly<-read_excel('flies.xlsx')
+str(myfly)
+myfly$Foliage<-as.factor(myfly$Foliage)
+str(myfly)
+
+levels(myfly$Foliage)
+group_by(myfly,Foliage)
+fly.out<-group_by(myfly,Foliage)
+
+ggplot(myfly,aes(x=Flies_m3))+
+  geom_density(aes(group=Flies_m3,color=Flies_m3,fill=Flies_m3),alpha=0.3)
+
+```
+
+
+Summary Stats
+
+```{r}
+
+#Normality was run here
+normality(fly.out)
+
+#Test for homogeneity of variances
+bartlett.test(myfly$Flies_m3~myfly$Foliage)
+
+```
+
+ANOVA Test
+
+```{r}
+
+fly.test<-aov(Flies_m3~Foliage,data=myfly)
+summary(fly.test)
+
+```
+
+
+Conclusion
+
+
+
